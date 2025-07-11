@@ -56,10 +56,10 @@ export const verifyUserRole = (req, res, next) => {
 export const checkUserMatch = (req, res, next) => {
     const { id, email, username } = req.params;
     const { id: userId, email: userEmail, username: userUsername } = req.user;
-
-    if (userId !== id || userEmail !== email || userUsername !== username) {
+    console.log(`${JSON.stringify(req.user)}`.blue.bold)
+    if (userId !== id) {
         return res.status(403).json({
-            message: 'Unauthorized access, Only Created can delete Blog'
+            message: 'Unauthorized access, at This User'
         });
     }
     next();

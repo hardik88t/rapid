@@ -13,16 +13,19 @@ const blogModelSchema = new mongoose.Schema(
             required: true,
         },
         content: {
-            type: String,
+            type: [{
+                type: Object,
+                required: true
+            }],
             required: true,
         },
         status: {
             type: String,
-            enum: ["Draft", "Scheduled", "Published", "Deleted"],
+            enum: ["Draft", "Scheduled", "Published"],
             default: "Draft",
         },
         attachments: {
-            type: [String],
+            type: [],
             default: [],
         },
         publishDate: {
@@ -36,12 +39,12 @@ const blogModelSchema = new mongoose.Schema(
         },
         author: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'UserModel',
+            ref: UserModel,
             immutable: true
         },
         showAuthor: {
             type: Boolean,
-            default: true,
+            default: false,
         },
         slug: {
             type: String,
@@ -54,7 +57,7 @@ const blogModelSchema = new mongoose.Schema(
         },
         modifiedBy: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'UserModel',
+            ref: UserModel,
         },
         customFields: {
             type: Object,
@@ -67,19 +70,6 @@ const blogModelSchema = new mongoose.Schema(
     }
 );
 
-// Define the renderBlog method
-blogModelSchema.methods.renderBlog = async function () {
-    await this.populate('author').execPopulate();
-    const authorName = this.author.username; // Assuming username is the field you want to use
-    return {
-        title: this.title,
-        subtitle: this.subtitle,
-        content: this.content,
-        attachments: this.attachments,
-        publishDate: this.publishDate,
-        author: authorName,
-    };
-};
 
 const BlogModel = mongoose.model('blogModel', blogModelSchema)
 

@@ -7,9 +7,9 @@ const router = express.Router();
 
 
 router.use('/test', test);
-router.get('/validate', validateUsername);
 router.get('/getfbtoken', verifyToken, getFirebaseToken)
 
+router.post('/validate', validateUsername);
 router.post('/sendotp', getOTP);
 router.post('/reset', resetPassword);
 router.post('/register', register);

@@ -10,9 +10,8 @@ export default function Test() {
             <Navbar />
             {/* <Configbar /> */}
 
-            <div className='flex justify-center items-center mt-24 mr-72 ml-16 align-middle'>
-                TEST PAGE
-                <NoBlog />
+            <div className='flex justify-center items-center mt-24 mr-72 ml-16 h-96 text-xl align-middle'>
+                TEST/HOME PAGE
             </div>
 
         </>

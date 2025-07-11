@@ -2,14 +2,14 @@ import { LuAlignLeft } from "react-icons/lu";
 import { IoIosMore, IoIosArrowBack } from "react-icons/io";
 // import { FaArrowCircleRight } from "react-icons/fa";
 // import { FaFire, FaPoo } from 'react-icons/fa';
-import Moredock from "./Moredock.jsx";
+import Moreoption from "./Moreoption.jsx";
 
 import { Link } from 'react-router-dom';
 
 
 const Navbar = () => {
     return (
-        <div className="top-0 left-0 fixed flex flex-row justify-between bg-white shadow-lg ml-16 pr-16 pl-8 min-w-full h-24 align-middle">
+        <div className="top-0 left-0 z-10 fixed flex flex-row justify-between bg-white shadow-lg ml-16 pr-16 pl-8 min-w-full h-24 align-middle">
             <div className="flex flex-row my-auto">
                 <LuAlignLeft className='w-11 h-11' />
                 <div className="flex flex-col">
