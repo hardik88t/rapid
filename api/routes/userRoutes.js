@@ -1,7 +1,7 @@
 import express from "express";
 
 import { verifyToken, verifyAdminRole, verifyUserRole, checkUserMatch } from "../utils/verifyToken.js";
-import { test, getUsers, getUserById, updateUserById, deleteUserById, softDeleteUserById, getUserByEmail, getUserByUsername } from '../controllers/userController.js'
+import { test, getUsers, getThisUser, getUserById, updateUserById, deleteUserById, softDeleteUserById, getUserByEmail, getUserByUsername } from '../controllers/userController.js'
 
 const router = express.Router();
 
@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.use('/test', test);
 router.get('/getallusers', verifyToken, verifyAdminRole, getUsers);
+router.get('/', verifyToken, verifyAdminRole, getThisUser);
+// router.get('/me', verifyToken, verifyAdminRole, getThisUser);
 router.get('/:id', verifyToken, verifyAdminRole, getUserById);
 router.get('/email/:email', verifyToken, verifyAdminRole, getUserByEmail);
 router.get('/username/:username', verifyToken, verifyAdminRole, getUserByUsername);
@@ -18,7 +20,7 @@ router.get('/username/:username', verifyToken, verifyAdminRole, getUserByUsernam
 
 
 // Only accessable if You are ADMIN OR Owner 
-router.put('/update/:id', verifyToken, [verifyAdminRole, checkUserMatch], updateUserById);
+router.put('/update/:id', verifyToken, verifyAdminRole, checkUserMatch, updateUserById);
 
 router.delete('/delete/:id', verifyToken, checkUserMatch, softDeleteUserById);
 router.delete('/delete/:id', verifyToken, checkUserMatch, softDeleteUserById);

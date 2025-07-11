@@ -26,7 +26,7 @@ export const getOTP = async (req, res, next) => {
     const { email } = req.body;
     console.log(email)
     if (!email || email === '') {
-        console.log(email.yellow)
+        console.log(email)
         return next(errorMessage(400, 'Missing email'));
     }
 
@@ -85,7 +85,10 @@ export const register = [
         }
 
         const { username, firstname, lastname, email, password, otp } = req.body;
-
+        const alreadyUsed = await User.findOne({ email });
+        if (alreadyUsed) {
+            return res.status(400).json({ errors: "User Already Exixts" });
+        }
         try {
             // Check if OTP matches
             if (otpStorage[email] !== parseInt(otp)) {
@@ -160,16 +163,21 @@ export const login = async (req, res, next) => {
         return next(errorMessage(400, 'Validation failed', errors.array()));
     }
 
-    const { email, username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
         let validUser;
-        if (email) {
-            validUser = await User.findOne({ email });
-        } else if (username) {
-            validUser = await User.findOne({ username });
-        } else {
+        if (!email) {
             return next(errorMessage(400, 'Email or username is required'));
+        }
+
+        const isEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+
+
+        if (isEmail) {
+            validUser = await User.findOne({ email });
+        } else {
+            validUser = await User.findOne({ username: email });
         }
 
         if (!validUser) {
@@ -198,7 +206,7 @@ export const login = async (req, res, next) => {
             .cookie('access_token', token, {
                 httpOnly: true,
                 secure: true, // Set to true for HTTPS
-                expires: new Date(Date.now() + 6 * 60 * 60 * 1000), // 6 hours expiration
+                expires: new Date(Date.now() + 60 * 60 * 60 * 1000), // 6 hours expiration
             })
             .json(rest);
 
@@ -213,6 +221,7 @@ admin.initializeApp({
 });
 
 export const getFirebaseToken = (req, res) => {
+    console.log("FBTOKEN".yellow.bold)
     // Get the UID of the user from the request or use a default value
     const uid = req.user?.id || 'VERY_STRONG_SECRET';
 

@@ -1,6 +1,7 @@
 import SideBar from '../components/Sidebar.jsx';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate instead of useHistory
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const ResetPasswordForm = () => {
     const [email, setEmail] = useState('');
@@ -8,10 +9,14 @@ const ResetPasswordForm = () => {
     const [newPassword, setNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate(); // Use useNavigate instead of useHistory
+    const navigate = useNavigate();
+
 
     const sendOtp = async () => {
         setLoading(true);
+        // Show a toast indicating OTP is being sent
+        const toastId = toast.loading('Sending OTP...');
+
         try {
             const response = await fetch('/api/auth/sendotp', {
                 method: 'POST',
@@ -20,16 +25,24 @@ const ResetPasswordForm = () => {
                 },
                 body: JSON.stringify({ email })
             });
-            // Handle response
+
+            toast.success('OTP sent successfully.');
         } catch (error) {
             console.error('Error sending OTP:', error);
             setError('Error sending OTP. Please try again.');
+            toast.error('Failed to send OTP.');
         } finally {
             setLoading(false);
+            toast.dismiss(toastId);
         }
     };
 
+
+
     const resetPassword = async () => {
+        // Show a toast indicating password reset is in progress
+        const toastId = toast.loading('Resetting password...');
+
         setLoading(true);
         try {
             const response = await fetch('/api/auth/reset', {
@@ -39,14 +52,18 @@ const ResetPasswordForm = () => {
                 },
                 body: JSON.stringify({ email, otp, newPassword })
             });
-            // Handle response
-            // Redirect to login page after successful password reset
-            navigate('/login'); // Use navigate instead of history.push
+            if (response.ok) {
+                toast.success('Password reset successful.');
+                navigate('/login');
+            } else {
+                toast.error('Failed to reset password. Please try again.');
+            }
         } catch (error) {
             console.error('Error resetting password:', error);
-            setError('Error resetting password. Please try again.');
+            toast.error('Error resetting password. Please try again.');
         } finally {
             setLoading(false);
+            toast.dismiss(toastId);
         }
     };
 

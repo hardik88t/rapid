@@ -2,18 +2,21 @@ import { LuAlignLeft } from "react-icons/lu";
 import { IoIosMore, IoIosArrowBack } from "react-icons/io";
 // import { FaArrowCircleRight } from "react-icons/fa";
 // import { FaFire, FaPoo } from 'react-icons/fa';
-import Moredock from "./Moredock.jsx";
+import Moreoption from "./Moreoption.jsx";
 
 import { Link } from 'react-router-dom';
 
 
-const NoBlog = () => {
+const NoBlog = ({ contentHead }) => {
     return (
         <div className="flex flex-row gap-6 border-gray-300 border rounded-lg w-fit">
             <div className="flex flex-col justify-center ml-6">
                 <div className="flex flex-col">
                     <div className="m-2 font-bold text-3xl">
-                        No Pages Found.
+                        {
+                            contentHead ?? "No Pages Found."
+                        }
+
                     </div>
                     <div className="m-2 text-gray-500 text-sm">
                         Looks like you don’t have any pages yet. Let’s add a new page.

@@ -7,7 +7,7 @@ import cron from 'node-cron';
 
 import { logRequestDetails } from './utils/logger.js';
 import { connectToMongoDB } from './utils/mongoose.js';
-import { scheduleDailyEmail } from './utils/emailSender.js';
+import { scheduleDailyEmail, schedulePublish, publishScheduledBlogs } from './utils/emailSender.js';
 
 import userRoutes from './routes/userRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
@@ -31,9 +31,23 @@ if (process.env.NODE_ENV !== 'production') {
 // app.use(express.static('public'));
 app.use(express.json(), (req, res, next) => {
     console.log(req.body);
+    console.log(JSON.stringify(req.body).pink);
     next();
 });
 app.use(cookieParser());
+
+
+app.get('/test', (req, res, next) => {
+    console.log("Verify".bold.yellow);
+    next();
+}, (req, res) => {
+    console.log("TEST".bold.yellow);
+    res.status(200).json({ message: 'TEST PAGE' });
+})
+
+
+
+
 
 
 // Route Handler
@@ -50,6 +64,11 @@ app.use((req, res) => {
     res.status(404).json({ message: 'Page not found' });
 });
 
+app.use('/', (req, res) => {
+    console.log("at /")
+    res.send(200)
+})
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack); // Log the error stack trace
@@ -57,7 +76,11 @@ app.use((err, req, res, next) => {
 });
 
 
-scheduleDailyEmail('0 8 * * *');
+// scheduleDailyEmail('* * * * *');
+// schedulePublish("* * * * *");
+// scheduleDailyEmail();
+// schedulePublish();
+// publishScheduledBlogs();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

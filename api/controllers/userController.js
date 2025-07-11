@@ -35,13 +35,42 @@ export const getUserById = async (req, res, next) => {
     }
 };
 
+
+export const getThisUser = async (req, res, next) => {
+    const { id } = req.user;
+    try {
+        const user = await User.findById(id)
+            .select('username id email firstname lastname profilePicture role isSubscribed isTwoFactorEnabled address phoneNumber socialProfiles passwordLastChanged customFields');
+        if (!user) {
+            return next(errorMessage(404, 'User not found'));
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Error in getThisUser:', error);
+        next(errorMessage(500, 'Internal server error'));
+    }
+};
+
+
+
+// export const getThisUserJWT = async (req, res, next) => {
+//     try {
+//         res.status(200).json(req.user);
+//     } catch (error) {
+//         console.error('Error in getUserById:', error);
+//         next(errorMessage(500, 'Internal server error'));
+//     }
+// };
+
+
 // Update a user by ID
 export const updateUserById = async (req, res, next) => {
     const { id } = req.params;
-
+    console.log(`${req.body}`.red, "==================");
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        console.log(errors)
         return res.status(400).json({ errors: errors.array() });
     }
 
@@ -50,7 +79,7 @@ export const updateUserById = async (req, res, next) => {
         if (!user) {
             return next(errorMessage(404, 'User not found'));
         }
-        res.status(200).json(user);
+        res.status(200);
     } catch (error) {
         console.error('Error in updateUserById:', error);
         next(errorMessage(500, 'Internal server error'));
