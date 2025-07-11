@@ -1,0 +1,43 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Rapid Blog Builder BackEnd API",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env index.js",
+    "dev": "nodemon --env-file=.env index.js",
+    "test": "mocha tests/*.test.js",
+    "swagger": "node ./swagger.js",
+    "debug": "nodemon --inspect=127.0.0.1:9277 --env-file=.env index.js"
+  },
+  "keywords": [
+    "blog",
+    "express",
+    "api",
+    "mongodb"
+  ],
+  "author": "hardik88t",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.3",
+    "express-validator": "^7.0.1",
+    "firebase": "^10.9.0",
+    "firebase-admin": "^12.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.1",
+    "morgan": "^1.10.0",
+    "node": "^21.7.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.12",
+    "nodemon": "^3.1.0",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "winston": "^3.12.0",
+    "xss-clean": "^0.1.4"
+  }
+}
